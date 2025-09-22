@@ -7,13 +7,13 @@ categories: ["notebooks"]
 ---
 
 {{< lead >}}
-基于现代空间PatchTST（Patch Time Series Transformer）的NYC出租车时空流量预测模型，用于预测曼哈顿地区未来3小时的出租车流量分布，支持流入量和流出量的双通道预测。
+基于现代空间PatchTST（Patch Time Series Transformer）的NYC出租车时空流量预测模型，用于预测曼哈顿地区未来3小时的出租车流量分布，支持上客量和下客量的双通道预测。
 {{< /lead >}}
 
 
 ## Jupyter Notebook预览
 <iframe 
-  src="https://nbviewer.org/github/arkin-developer/notebooks/blob/main/time-series-forecasting/NYC_Taxi_Spatial_Forecasting.ipynb"
+  src="https://nbviewer.org/github/arkin-developer/notebooks/blob/main/spatiotemporal-forecasting/spatiotemporal-forecasting.ipynb"
   width="100%"
   height="600px"
   frameborder="0"
@@ -33,6 +33,7 @@ categories: ["notebooks"]
 
 ------
 
+
 ## ✅ 本教程包括
 
 1. 环境配置与硬件检测
@@ -51,7 +52,7 @@ categories: ["notebooks"]
 - **参数高效**：~93K参数，比传统ConvLSTM减少81%
 - **时空建模**：同时处理空间（32×32栅格）和时间（6小时→3小时）维度
 - **真实数据**：基于NYC出租车GPS轨迹的真实交通数据
-- **双通道预测**：同时预测流入量和流出量
+- **双通道预测**：同时预测上客量和下客量
 - **跨平台支持**：支持Apple Silicon MPS、CUDA和CPU
 - **业务导向**：面向实际交通调度和运营优化场景
 
@@ -62,6 +63,42 @@ categories: ["notebooks"]
 - **核心组件**：时间Patch嵌入 + 空间位置编码 + Transformer编码器
 - **预测头**：多层感知机 + 输出投影层
 - **特征维度**：d_model=64, n_heads=4, n_layers=2（轻量级配置）
+
+## 🎓 你将学会
+
+### **1. 时空数据处理技术**
+- **🗺️ 空间网格化**：将GPS轨迹数据转换为规则网格格式
+- **⏰ 时间序列构建**：按时间间隔聚合空间数据，构建时空序列
+- **📊 数据预处理**：标准化、归一化、数据清洗技术
+- **🔄 数据增强**：时空数据的增强和扩充方法
+
+### **2. PatchTST神经网络架构**
+- **🧩 Patch化技术**：将时间序列分割为patches进行并行处理
+- **🎯 通道独立建模**：每个空间位置独立处理，避免信息干扰
+- **🔗 Transformer编码器**：自注意力机制在时序预测中的应用
+- **📍 位置编码**：时间和空间位置信息的编码方法
+- **⚡ 轻量级设计**：如何设计高效的时空预测模型
+
+### **3. 深度学习工程实践**
+- **🍎 Apple Silicon优化**：MPS加速在深度学习中的应用
+- **📱 设备管理**：智能选择CPU/GPU/MPS计算设备
+- **🔄 训练流程**：完整的模型训练、验证、测试流程
+- **📈 性能监控**：损失函数、早停机制、学习率调度
+- **💾 模型保存**：最佳模型保存和加载策略
+
+### **4. 时空预测业务应用**
+- **🚕 交通流量预测**：城市交通需求的时空分布预测
+- **📊 业务指标设计**：如何设计符合业务需求的预测指标
+- **🎯 模型评估**：MSE、MAE等评估指标的实际意义
+- **💼 商业价值**：预测模型在调度优化、动态定价中的应用
+- **🔮 未来扩展**：如何将模型扩展到其他时空预测场景
+
+### **5. 可视化与分析技术**
+- **📊 时空数据可视化**：热力图、时序图、误差分析图
+- **🔍 模型解释性**：理解模型预测结果和决策过程
+- **📈 训练过程监控**：训练曲线、验证曲线分析
+- **🎨 结果展示**：如何清晰展示预测结果和业务价值
+
 
 ## 🎯 应用场景
 
