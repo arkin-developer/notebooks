@@ -1,0 +1,119 @@
+---
+description: 项目布局和开发规范
+globs: ["**/*.ipynb", "**/*.py", "**/*.md"]
+alwaysApply: true
+---
+
+# 📁 项目布局规范
+
+## 新建项目结构
+每次创建新项目时，必须按照以下结构组织：
+
+```
+项目名称/
+├── 项目名称.ipynb          # 主要的Jupyter Notebook文件
+├── README.md               # 项目说明文档
+└── scripts/                # 调试脚本目录（可选）
+    ├── debug_*.py          # 调试脚本
+    └── utils.py            # 工具函数
+```
+
+## 开发流程规范
+
+### 1. 项目创建
+- 为每个新项目创建独立的目录
+- 目录名与项目名保持一致
+- 必须包含同名的 `.ipynb` 文件和 `README.md` 文件
+
+### 2. 代码调试流程
+当 Notebook 中的 cell 出现代码错误时：
+
+1. **创建调试脚本**：在项目目录下创建 `debug_*.py` 文件
+2. **独立调试**：在 Python 脚本中调试和测试代码
+3. **验证功能**：确保代码在脚本中运行正常
+4. **更新 Notebook**：将调试好的代码复制回对应的 cell
+
+### 3. 文件命名规范
+- 主 Notebook：`项目名.ipynb`
+- 调试脚本：`debug_功能名.py`
+- 工具函数：`utils.py` 或 `helpers.py`
+- 文档：`README.md`
+
+### 4. 目录结构示例
+```
+3d-object-classification/
+├── 3d-object-classification.ipynb
+├── README.md
+└── scripts/
+    ├── debug_data_loading.py
+    ├── debug_visualization.py
+    └── utils.py
+
+spatiotemporal-forecasting/
+├── spatiotemporal-forecasting.ipynb
+├── README.md
+└── scripts/
+    ├── debug_model_training.py
+    └── data_utils.py
+```
+
+## Notebook 独立运行规范
+
+### 核心要求
+- **绝对禁止**使用 `sys.path.append('./scripts')` 或类似路径操作
+- **绝对禁止**使用 `from scripts.xxx import yyy` 等外部模块导入
+- **必须**将所有必要的类和函数直接定义在 Notebook 中
+- **必须**确保 Notebook 可以独立运行，无需任何外部文件依赖
+
+### 开发流程
+1. **开发阶段**：可以在 `scripts/` 目录中编写和调试代码
+2. **集成阶段**：将调试好的代码复制到 Notebook 中
+3. **测试阶段**：确保 Notebook 可以独立运行
+4. **清理阶段**：移除所有外部依赖和路径操作
+
+### 代码示例
+
+#### ❌ 错误做法
+```python
+import sys
+sys.path.append('./scripts')
+from model import PointNet
+from dataset import MyDataset
+```
+
+#### ✅ 正确做法
+```python
+# 直接在 Notebook 中定义所有必要的类
+class PointNet(nn.Module):
+    def __init__(self):
+        # ... 类定义
+        pass
+
+class MyDataset(Dataset):
+    def __init__(self):
+        # ... 类定义
+        pass
+```
+
+## 开发建议
+
+### Notebook 使用原则
+- 保持 cell 简洁，每个 cell 专注单一功能
+- **独立运行原则**：Notebook 必须能够独立运行，不得使用 `sys.path.append()` 等路径操作
+- **代码内嵌原则**：所有必要的类和函数都应该直接在 Notebook 中定义，而不是从外部文件导入
+- 复杂逻辑优先在 Python 脚本中开发，但最终要集成到 Notebook 中
+- 使用 `%pip install` 而不是 `!pip install` 安装依赖
+- 定期保存和清理输出
+
+### 调试最佳实践
+- 遇到错误时，立即创建对应的调试脚本
+- 在脚本中使用 `print()` 和 `pdb` 进行调试
+- 使用 `if __name__ == "__main__":` 保护主执行代码
+- 调试完成后，将工作代码复制回 Notebook
+
+### 代码组织
+- **Notebook 自包含**：所有必要的代码都应该在 Notebook 中定义，确保可以独立运行
+- 将可复用的函数提取到 `utils.py`（用于调试），但最终要复制到 Notebook 中
+- **禁止外部导入**：不得使用 `sys.path.append()`、`import scripts.xxx` 等外部模块导入
+- 保持 Notebook 的可读性和可维护性
+- 使用清晰的 Markdown 标题组织代码结构
