@@ -2,6 +2,10 @@
 # 1) Ignore everything by default
 *
 
+# 1.1) Explicitly ignore notebook checkpoints and virtual documents
+**/.ipynb_checkpoints/**
+**/.virtual_documents/**
+
 # 2) Allow traversing into directories so unignored files can be found
 !*/
 
