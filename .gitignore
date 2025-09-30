@@ -6,6 +6,11 @@
 **/.ipynb_checkpoints/**
 **/.virtual_documents/**
 
+# 1.2) Allow project rules in .cursor/rules to be tracked
+!**/.cursor/
+!**/.cursor/rules/
+!**/.cursor/rules/**
+
 # 2) Allow traversing into directories so unignored files can be found
 !*/
 
