@@ -2,25 +2,27 @@
 # 1) Ignore everything by default
 *
 
-# 1.1) Explicitly ignore notebook checkpoints and virtual documents
+# 2) Allow traversing into directories so unignored files can be found
+!*/
+
+# 3) Explicitly ignore notebook checkpoints and virtual documents (must be after !*/)
+.ipynb_checkpoints/
 **/.ipynb_checkpoints/**
+.virtual_documents/
 **/.virtual_documents/**
 
-# 1.2) Allow project rules in .cursor/rules to be tracked
+# 4) Allow project rules in .cursor/rules to be tracked
 !**/.cursor/
 !**/.cursor/rules/
 !**/.cursor/rules/**
 
-# 2) Allow traversing into directories so unignored files can be found
-!*/
-
-# 3) Always keep this ignore file itself
+# 5) Always keep this ignore file itself
 !.gitignore
 
-# 4) Allow Jupyter notebooks
+# 6) Allow Jupyter notebooks
 !**/*.ipynb
 
-# 5) Allow README files (common case variants)
+# 7) Allow README files (common case variants)
 !**/README.md
 !**/README.MD
 !**/readme.md
