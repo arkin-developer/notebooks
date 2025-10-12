@@ -1,307 +1,201 @@
 # 🤖 LangGraph 多 Agent 系统实战
 
-## 📖 项目简介
+本项目展示如何使用 LangGraph 构建复杂的多 Agent 协作系统，并使用 LangSmith 进行监控和调试。
 
-本项目展示如何使用 LangGraph 框架构建复杂的多 Agent 协作系统。通过实战案例学习 Agent 编排、状态管理、条件路由等核心技能。
+## 📋 环境配置
 
-## 🎯 学习目标
+### 配置方案
 
-- ✅ 掌握 LangGraph 核心概念（State、Node、Edge、Graph）
-- ✅ 学会构建状态机工作流
-- ✅ 实现多 Agent 协作模式
-- ✅ 掌握条件路由和动态决策
-- ✅ 了解实际应用场景和最佳实践
+本项目采用**混合配置**方式：
+- **全局环境变量**：`LANGCHAIN_API_KEY` (LangSmith API Key)
+- **项目环境变量**：其他配置项（TRACING、PROJECT、DeepSeek）
 
-## 🛠️ 技术栈
+### 快速开始
 
-- **框架**: LangGraph + LangChain
-- **LLM**: DeepSeek API（兼容 OpenAI）
-- **Python**: 3.11+
-- **依赖**: langgraph, langchain, langchain-openai
+#### 方法 1：使用 Shell 脚本（推荐）
 
-## 📚 项目结构
+1. **编辑配置脚本**：
+   ```bash
+   nano setup_env.sh
+   # 修改 OPENAI_API_KEY 为你的 DeepSeek API Key
+   ```
+
+2. **加载环境变量**：
+   ```bash
+   cd /Users/arkin/Desktop/Dev/notebooks/langgraph-multi-agent
+   source setup_env.sh
+   ```
+
+3. **启动 Jupyter**：
+   ```bash
+   jupyter notebook
+   # 或
+   jupyter lab
+   ```
+
+#### 方法 2：使用 Python 配置
+
+1. **编辑 config.py**：
+   ```python
+   # 在 config.py 中找到这一行，填入你的 API Key
+   if not os.environ.get('OPENAI_API_KEY'):
+       os.environ['OPENAI_API_KEY'] = 'your_deepseek_api_key_here'
+   ```
+
+2. **直接运行 Notebook**（会自动加载配置）
+
+### 验证配置
+
+运行诊断脚本检查配置是否正确：
+
+```bash
+cd /Users/arkin/Desktop/Dev/notebooks/langgraph-multi-agent
+python config.py
+```
+
+或运行详细测试：
+
+```bash
+python test_langsmith_detailed.py
+```
+
+## 🔑 获取 API Keys
+
+### LangSmith API Key（全局配置）
+
+1. 访问 [https://smith.langchain.com/](https://smith.langchain.com/)
+2. 注册/登录账号
+3. 点击右上角头像 → Settings → API Keys
+4. 创建 API Key（格式：`lsv2_pt_xxxxx`）
+5. 在全局配置：
+   ```bash
+   # 编辑 ~/.zshrc 或 ~/.bashrc
+   export LANGCHAIN_API_KEY='lsv2_pt_your_key'
+   
+   # 重新加载
+   source ~/.zshrc
+   ```
+
+### DeepSeek API Key（项目配置）
+
+1. 访问 [https://platform.deepseek.com/](https://platform.deepseek.com/)
+2. 注册/登录账号
+3. 创建 API Key
+4. 在 `setup_env.sh` 或 `config.py` 中配置
+
+## 📁 项目结构
 
 ```
 langgraph-multi-agent/
-├── langgraph-multi-agent.ipynb    # 主 Notebook
-├── README.md                       # 项目说明
-└── scripts/                        # 调试脚本（可选）
+├── langgraph-multi-agent.ipynb   # 主要的演示 Notebook
+├── config.py                      # Python 配置管理
+├── setup_env.sh                   # Shell 环境变量脚本
+├── check_langsmith.py             # LangSmith 配置检查
+├── test_langsmith_detailed.py     # 详细测试脚本
+└── README.md                      # 本文件
 ```
 
-## 🚀 快速开始
+## 🚀 使用方法
 
-### 1. 安装依赖
+### 1. 启动项目
 
 ```bash
-pip install langgraph langchain langchain-openai sentence-transformers
+# 进入项目目录
+cd /Users/arkin/Desktop/Dev/notebooks/langgraph-multi-agent
+
+# 加载环境变量
+source setup_env.sh
+
+# 启动 Jupyter
+jupyter notebook
 ```
 
-### 2. 配置 API Key
+### 2. 运行 Notebook
 
-在 Notebook 中替换你的 DeepSeek API Key：
+打开 `langgraph-multi-agent.ipynb`，按顺序运行单元格。
 
-```python
-os.environ["OPENAI_API_KEY"] = "your-deepseek-api-key-here"
-os.environ["OPENAI_API_BASE"] = "https://api.deepseek.com"
+### 3. 查看 LangSmith 监控
+
+- 访问 [https://smith.langchain.com/](https://smith.langchain.com/)
+- 在左侧找到项目：`langgraph-multi-agent`
+- 查看实时执行详情、性能分析、成本统计
+
+## 🔍 故障排查
+
+### 问题 1：LangSmith 看不到数据
+
+**检查**：
+```bash
+python check_langsmith.py
 ```
 
-### 3. 运行 Notebook
+**常见原因**：
+- 环境变量未设置或未生效
+- Jupyter Kernel 未重启
+- API Key 不正确
 
-打开 `langgraph-multi-agent.ipynb` 并按顺序执行各个 cell。
+**解决**：
+1. 确认环境变量已正确设置
+2. 重启 Jupyter Kernel
+3. 刷新 LangSmith 网页
 
-## 📋 内容概览
+### 问题 2：环境变量不生效
 
-### 一、LangGraph 基础概念
+**原因**：环境变量只在当前 shell 会话有效
 
-- State 状态管理
-- Node 节点定义
-- Edge 边和路由
-- Graph 工作流编排
-- 简单示例演示
+**解决**：
+```bash
+# 确保在同一个终端中：
+# 1. 设置环境变量
+source setup_env.sh
 
-### 二、实战案例：智能内容创作团队
-
-**系统架构**：
+# 2. 启动 Jupyter
+jupyter notebook
 ```
-用户需求 → 研究员 Agent → 作家 Agent → 编辑 Agent → 最终内容
+
+### 问题 3：API Key 错误
+
+**检查配置**：
+```bash
+echo "LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY:0:20}..."
+echo "OPENAI_API_KEY: ${OPENAI_API_KEY:0:20}..."
 ```
 
-**Agent 角色**：
-- 📚 **研究员 Agent**：收集信息和资料
-- ✍️ **作家 Agent**：撰写结构化内容
-- 🔍 **编辑 Agent**：审核和改进文章
-- 🎯 **质检 Agent**：评估内容质量
+## 📚 学习目标
 
-**核心功能**：
-- 状态在 Agent 间传递
-- 条件路由（根据质量决定是否重做）
-- 循环迭代改进
-- 完整的工作流管理
+通过本项目，你将学会：
 
-### 三、高级特性
+- ✅ LangGraph 基础概念（State、Node、Edge、Graph）
+- ✅ 构建多 Agent 协作系统
+- ✅ 实现条件路由和动态决策
+- ✅ 使用 LangSmith 监控和调试
+- ✅ 实战案例：智能内容创作团队
 
-- 动态路由机制
-- 质量检查循环
-- 智能决策分支
-- 状态持久化
+## 🎯 实战案例
 
-### 四、可视化工作流
+### 1. 基础示例
+简单的两步工作流，理解 LangGraph 基本概念。
 
-- ASCII 流程图
-- 工作流结构展示
-- 决策节点说明
+### 2. 内容创作团队
+研究员 → 作家 → 编辑的协作流程，展示多 Agent 串行协作。
 
-### 五、更多实用案例
-
-**5.1 客服团队 Agent**
-- 问题分类 Agent
-- 技术支持 Agent
-- 账单处理 Agent
-- 智能路由到专家
-
-**5.2 代码审查团队**
-- 安全审查 Agent
-- 性能审查 Agent
-- 风格审查 Agent
-- 并行处理机制
-
-## 🎨 应用场景
-
-### 1. 内容创作系统
-- 自动化文章生成
-- 多轮质量改进
-- 协作式写作
-
-### 2. 客户服务系统
-- 智能问题分类
-- 专家路由
-- 自动化响应
-
-### 3. 代码审查流程
-- 多维度代码检查
-- 并行审查
-- 自动化建议
-
-### 4. 数据分析管道
-- 数据收集 → 清洗 → 分析 → 报告
-- 多阶段处理
-- 错误重试机制
-
-### 5. 智能助手系统
-- 任务分解
-- 专业化处理
-- 结果整合
+### 3. 质量循环
+带质量检查的循环改进机制，展示条件路由和迭代优化。
 
 ## 💡 最佳实践
 
-### 1. 状态设计
-- 定义清晰的状态结构
-- 使用 TypedDict 类型提示
-- 考虑状态的演化过程
-
-### 2. Agent 设计
-- 单一职责原则
-- 明确的输入输出
-- 可测试性
-
-### 3. 路由策略
-- 清晰的决策逻辑
-- 避免死循环
-- 设置最大迭代次数
-
-### 4. 错误处理
-- 异常捕获
-- 回退机制
-- 日志记录
-
-### 5. 性能优化
-- 并行处理独立任务
-- 缓存重复计算
-- 流式输出
-
-## 🔍 关键代码示例
-
-### 定义状态
-
-```python
-class AgentState(TypedDict):
-    topic: str
-    research_notes: str
-    draft_content: str
-    final_content: str
-    messages: Annotated[List, operator.add]
-    next_agent: str
-    iteration: int
-```
-
-### 创建 Agent
-
-```python
-def researcher_agent(state: AgentState) -> AgentState:
-    # Agent 逻辑
-    result = llm.invoke(prompt)
-    return {
-        **state,
-        "research_notes": result.content,
-        "next_agent": "writer"
-    }
-```
-
-### 构建工作流
-
-```python
-workflow = StateGraph(AgentState)
-workflow.add_node("researcher", researcher_agent)
-workflow.add_node("writer", writer_agent)
-workflow.add_conditional_edges("researcher", route_agent)
-app = workflow.compile()
-```
-
-### 运行工作流
-
-```python
-result = app.invoke(initial_state)
-```
-
-## 📊 工作流可视化
-
-```
-    ┌─────────────┐
-    │   开始      │
-    └──────┬──────┘
-           ↓
-    ┌─────────────┐
-    │  研究员      │ ← 收集信息
-    └──────┬──────┘
-           ↓
-    ┌─────────────┐
-    │   作家       │ ← 撰写内容
-    └──────┬──────┘
-           ↓
-    ┌─────────────┐
-    │   编辑       │ ← 审核改进
-    └──────┬──────┘
-           ↓
-    ┌─────────────┐
-    │  质量检查    │ ← 评估质量
-    └──────┬──────┘
-           ↓
-      [分数>=8?]
-       ↙     ↘
-     是       否
-     ↓         ↓
-   结束    返回作家
-```
-
-## 🔧 DeepSeek 配置说明
-
-### 为什么选择 DeepSeek？
-
-- 💰 **价格优势**：比 OpenAI 便宜约 90%
-- 🇨🇳 **中文友好**：对中文理解能力强
-- 🔌 **API 兼容**：完全兼容 OpenAI API 格式
-- 🚀 **性能优秀**：接近 GPT-3.5 水平
-
-### 配置方式
-
-```python
-os.environ["OPENAI_API_KEY"] = "your-deepseek-api-key"
-os.environ["OPENAI_API_BASE"] = "https://api.deepseek.com"
-
-llm = ChatOpenAI(
-    model="deepseek-chat",
-    openai_api_base="https://api.deepseek.com"
-)
-```
-
-### 获取 API Key
-
-1. 访问 [DeepSeek Platform](https://platform.deepseek.com/)
-2. 注册/登录账号
-3. 创建 API Key
-4. 替换 Notebook 中的占位符
-
-## 📈 进阶学习
-
-### LangGraph 高级特性
-
-1. **Checkpointing**：保存和恢复工作流状态
-2. **Streaming**：流式输出中间结果
-3. **Subgraphs**：嵌套工作流
-4. **Parallel Execution**：并行执行节点
-5. **Human-in-the-loop**：人机协作
-
-### 扩展方向
-
-- 集成更多工具（搜索、数据库等）
-- 实现更复杂的决策逻辑
-- 添加监控和可观测性
-- 优化性能和并发
-- 部署为 Web 服务
+1. **清晰的状态设计**：定义完整的状态结构
+2. **单一职责**：每个 Agent 专注一个任务
+3. **使用 LangSmith**：监控所有执行细节
+4. **错误处理**：考虑异常情况和回退机制
+5. **性能优化**：通过 LangSmith 分析瓶颈
 
 ## 📖 参考资源
 
-### 官方文档
-
 - [LangGraph 文档](https://langchain-ai.github.io/langgraph/)
-- [LangChain 文档](https://python.langchain.com/)
-- [DeepSeek API 文档](https://platform.deepseek.com/docs)
-
-### 学习资料
-
-- LangGraph 教程
-- Multi-Agent 系统设计模式
-- Agent 协作最佳实践
-
-## 🤝 贡献
-
-欢迎提出问题和建议！
-
-## 📄 许可证
-
-MIT License
+- [LangSmith 文档](https://docs.smith.langchain.com/)
+- [DeepSeek API 文档](https://platform.deepseek.com/api-docs/)
 
 ---
 
-**🎉 开始你的多 Agent 系统之旅吧！**
-
+**🎉 祝学习愉快！有问题随时查看故障排查部分或运行诊断脚本。**
