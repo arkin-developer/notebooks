@@ -1,5 +1,5 @@
 ---
-title: "3D物体分类案例 - ModelNet40数据集"
+title: "🧊 3D视觉篇 - 3D点云物体分类案例"
 description: "基于PointMLP的轻量级3D点云分类模型"
 date: 2025-01-27
 tags: ["3D物体分类", "PointMLP", "点云处理", "深度学习", "ModelNet40"]
@@ -45,7 +45,6 @@ categories: ["notebooks"]
 | **七、数据加载** | Dataset + DataLoader | PyTorch数据流 |
 | **八、模型训练** | 端到端训练 | Adam + Scheduler |
 | **九、模型评估** | 性能分析 | 混淆矩阵 + 分类报告 |
-| **十、总结扩展** | 改进方向 | PointNeXt, 自监督预训练 |
 
 
 ## 🔬 核心技术亮点
