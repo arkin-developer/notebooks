@@ -1,5 +1,5 @@
 ---
-title: "Qwen2.5模型微调案例"
+title: "🔧 LLM微调篇 - Qwen2.5微调案例
 description: "演示纯前端解析 .ipynb 文件"
 date: 2025-08-20
 tags: ["LLM模型微调", "ModelScope", "Notebook", "LoRA/QLoRA"]
